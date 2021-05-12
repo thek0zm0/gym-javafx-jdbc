@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox prefHeight="136.0" prefWidth="363.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/15.0.1">
+   <children>
+      <Label prefHeight="27.0" prefWidth="158.0" text="Sobre o Sistema: ">
+         <font>
+            <Font name="NasalizationRg-Regular" size="12.0" />
+         </font>
+         <padding>
+            <Insets bottom="10.0" left="20.0" top="10.0" />
+         </padding>
+      </Label>
+      <Label prefHeight="179.0" prefWidth="333.0" text="Aplicação Java sobre um sistema de academias, utilizando &#10;JavaFX e Mysql. Este sistema foi criado por Lucas Moraes &#10;para a matéria de Programação Desktop.">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </Label>
+   </children>
+</VBox>
