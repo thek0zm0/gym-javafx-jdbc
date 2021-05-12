@@ -40,7 +40,7 @@ public class MainViewController implements Initializable
 	@FXML
 	public void onMenuItemPlanAction() 
 	{
-		System.out.println("Plan Pressed");
+		loadView("/gui/PlansList.fxml");
 	}
 	
 	@FXML
