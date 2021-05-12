@@ -8,8 +8,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox prefHeight="203.0" prefWidth="248.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/15.0.1">
+<VBox prefHeight="203.0" prefWidth="248.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PlansListController">
    <children>
       <Label prefHeight="24.0" prefWidth="121.0" text="Registrar Treinos">
          <padding>
@@ -18,13 +17,13 @@
       </Label>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
-          <Button mnemonicParsing="false" text="Novo" />
+          <Button fx:id="btNew" mnemonicParsing="false" onAction="#onBtNewAction" text="Novo" />
         </items>
       </ToolBar>
-      <TableView prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableViewPlan" prefHeight="200.0" prefWidth="200.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="ID" />
-          <TableColumn prefWidth="75.0" text="Nome" />
+          <TableColumn fx:id="tableColumnId" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="tableColumnName" prefWidth="75.0" text="Nome" />
         </columns>
       </TableView>
    </children>
