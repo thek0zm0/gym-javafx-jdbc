@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -22,6 +25,8 @@ public class PlanFormController implements Initializable
 	private Plans entity;
 	
 	private PlanService service;
+	
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 	
 	@FXML
 	private TextField txtId;
@@ -48,6 +53,11 @@ public class PlanFormController implements Initializable
 		this.service = service;
 	}
 	
+	public void subscribeDataChangeListener(DataChangeListener listener)
+	{
+		dataChangeListeners.add(listener);
+	}
+	
 	@FXML
 	public void onBtSaveAction(ActionEvent event) 
 	{
@@ -63,6 +73,7 @@ public class PlanFormController implements Initializable
 		{
 			entity = getFormData();
 			service.saveOrUpdate(entity);
+			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		}
 		catch(DbException e)
@@ -71,6 +82,14 @@ public class PlanFormController implements Initializable
 		}
 	}
 	
+	private void notifyDataChangeListeners() 
+	{
+		for(DataChangeListener listeners : dataChangeListeners)
+		{
+			listeners.onDataChanged();
+		}
+	}
+
 	private Plans getFormData() 
 	{
 		Plans obj = new Plans();
@@ -88,7 +107,6 @@ public class PlanFormController implements Initializable
 	@Override
 	public void initialize(URL url, ResourceBundle rb) 
 	{
-		// TODO Auto-generated method stub
 		initializeNodes();
 	}
 	

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import javafx.stage.Stage;
 import model.entities.Plans;
 import model.services.PlanService;
 
-public class PlansListController implements Initializable
+public class PlansListController implements Initializable, DataChangeListener
 {
 	private PlanService service;
 	
@@ -93,6 +94,7 @@ public class PlansListController implements Initializable
 			PlanFormController controller = loader.getController();
 			controller.setPlan(obj);
 			controller.setPlanService(new PlanService());
+			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 			
 			Stage dialogStage = new Stage();
@@ -107,5 +109,11 @@ public class PlansListController implements Initializable
 		{
 			Alerts.showAlert("IO Exception", "Erro ao carregar view", e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	@Override
+	public void onDataChanged() 
+	{
+		updateTableView();
 	}
 }
