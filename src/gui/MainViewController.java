@@ -16,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.MemberService;
 import model.services.PlanService;
 
 public class MainViewController implements Initializable
@@ -36,7 +37,11 @@ public class MainViewController implements Initializable
 	@FXML
 	public void onMenuItemMemberAction() 
 	{
-		System.out.println("Aluns Pressed");
+		loadView("/gui/MemberList.fxml", (MemberListController controller) -> 
+		{
+			controller.setMemberService(new MemberService());
+			controller.updateTableView();
+		});
 	}
 	
 	@FXML

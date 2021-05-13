@@ -29,8 +29,8 @@ public class MemberDaoJDBC implements MemberDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO Member "
-					+ "(Name, Email, BirthDate, Weight, PlansId) "
+					"INSERT INTO member "
+					+ "(Name, Email, BirthDate, Weight, PlanId) "
 					+ "VALUES "
 					+ "(?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
@@ -68,8 +68,8 @@ public class MemberDaoJDBC implements MemberDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE Member "
-					+ "SET Name = ?, Email = ?, BirthDate = ?, Weight = ?, PlansId = ? "
+					"UPDATE member "
+					+ "SET Name = ?, Email = ?, BirthDate = ?, Weight = ?, PlanId = ? "
 					+ "WHERE Id = ?");
 			
 			st.setString(1, obj.getName());
@@ -113,7 +113,7 @@ public class MemberDaoJDBC implements MemberDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT member.*,plan.Name as PlanName "
+					"SELECT member.*,plan.Name as DepName "
 					+ "FROM member INNER JOIN plan "
 					+ "ON member.PlanId = plan.Id "
 					+ "WHERE member.Id = ?");
@@ -142,14 +142,14 @@ public class MemberDaoJDBC implements MemberDao {
 		obj.setName(rs.getString("Name"));
 		obj.setEmail(rs.getString("Email"));
 		obj.setWeight(rs.getDouble("Weight"));
-		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setBirthDate(new java.util.Date(rs.getTimestamp("BirthDate").getTime()));
 		obj.setPlans(dep);
 		return obj;
 	}
 
 	private Plans instantiatePlans(ResultSet rs) throws SQLException {
 		Plans dep = new Plans();
-		dep.setId(rs.getInt("PlansId"));
+		dep.setId(rs.getInt("PlanId"));
 		dep.setName(rs.getString("DepName"));
 		return dep;
 	}
@@ -160,9 +160,9 @@ public class MemberDaoJDBC implements MemberDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT Member.*,Plans.Name as DepName "
-					+ "FROM Member INNER JOIN Plans "
-					+ "ON Member.PlansId = Plans.Id "
+					"SELECT member.*,plan.Name as DepName "
+					+ "FROM member INNER JOIN plan "
+					+ "ON member.PlanId = plan.Id "
 					+ "ORDER BY Name");
 			
 			rs = st.executeQuery();
@@ -172,11 +172,11 @@ public class MemberDaoJDBC implements MemberDao {
 			
 			while (rs.next()) {
 				
-				Plans dep = map.get(rs.getInt("PlansId"));
+				Plans dep = map.get(rs.getInt("PlanId"));
 				
 				if (dep == null) {
 					dep = instantiatePlans(rs);
-					map.put(rs.getInt("PlansId"), dep);
+					map.put(rs.getInt("PlanId"), dep);
 				}
 				
 				Member obj = instantiateMember(rs, dep);
@@ -194,18 +194,18 @@ public class MemberDaoJDBC implements MemberDao {
 	}
 
 	@Override
-	public List<Member> findByPlans(Plans Plans) {
+	public List<Member> findByPlans(Plans plan) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT Member.*,Plans.Name as DepName "
-					+ "FROM Member INNER JOIN Plans "
-					+ "ON Member.PlansId = Plans.Id "
-					+ "WHERE PlansId = ? "
+					"SELECT member.*,plan.Name as DepName "
+					+ "FROM member INNER JOIN plan "
+					+ "ON member.PlanId = plan.Id "
+					+ "WHERE PlanId = ? "
 					+ "ORDER BY Name");
 			
-			st.setInt(1, Plans.getId());
+			st.setInt(1, plan.getId());
 			
 			rs = st.executeQuery();
 			
@@ -214,11 +214,11 @@ public class MemberDaoJDBC implements MemberDao {
 			
 			while (rs.next()) {
 				
-				Plans dep = map.get(rs.getInt("PlansId"));
+				Plans dep = map.get(rs.getInt("PlanId"));
 				
 				if (dep == null) {
 					dep = instantiatePlans(rs);
-					map.put(rs.getInt("PlansId"), dep);
+					map.put(rs.getInt("PlanId"), dep);
 				}
 				
 				Member obj = instantiateMember(rs, dep);
