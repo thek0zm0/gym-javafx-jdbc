@@ -48,7 +48,8 @@ public class PlansListController implements Initializable
 	public void onBtNewAction(ActionEvent event)
 	{
 		Stage parentStage = Utils.currentStage(event);
-		createDialogForm("/gui/PlanForm.fxml", parentStage);
+		Plans obj = new Plans();
+		createDialogForm(obj, "/gui/PlanForm.fxml", parentStage);
 	}
 	
 	@Override
@@ -82,12 +83,16 @@ public class PlansListController implements Initializable
 		tableViewPlan.setItems(obsList);
 	}
 	
-	private void createDialogForm(String absoluteName, Stage parentStage)
+	private void createDialogForm(Plans obj, String absoluteName, Stage parentStage)
 	{
 		try
 		{
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
+			
+			PlanFormController controller = loader.getController();
+			controller.setPlan(obj);
+			controller.updateFormData();
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com os dados do Plano/Treino");
