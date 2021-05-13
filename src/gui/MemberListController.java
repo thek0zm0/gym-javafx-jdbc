@@ -32,6 +32,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Member;
 import model.services.MemberService;
+import model.services.PlanService;
 
 public class MemberListController implements Initializable, DataChangeListener {
 	private MemberService service;
@@ -111,7 +112,8 @@ public class MemberListController implements Initializable, DataChangeListener {
 
 			MemberFormController controller = loader.getController();
 			controller.setMember(obj);
-			controller.setMemberService(new MemberService());
+			controller.setMemberServices(new MemberService(), new PlanService());
+			controller.loadAssociatedObjects();
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
@@ -123,6 +125,7 @@ public class MemberListController implements Initializable, DataChangeListener {
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
 		} catch (IOException e) {
+			e.printStackTrace();
 			Alerts.showAlert("IO Exception", "Erro ao carregar view", e.getMessage(), AlertType.ERROR);
 		}
 	}
