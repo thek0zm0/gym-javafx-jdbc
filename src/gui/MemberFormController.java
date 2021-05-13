@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -131,7 +133,30 @@ public class MemberFormController implements Initializable {
 		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
 			exception.addError("name", "Campo nome vazio.");
 		}
+		
+		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
+			exception.addError("email", "Campo email vazio.");
+		}
+		
+		if(dpBirthDate.getValue()==null)
+		{
+			exception.addError("birthDate", "Campo data nao pode ser vazio.");
+		}
+		else
+		{
+			Instant instant = Instant.from(dpBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setBirthDate(Date.from(instant));
+		}
+		
+		if (txtWeight.getText() == null || txtWeight.getText().trim().equals("")) {
+			exception.addError("weight", "Campo peso vazio.");
+		}
+		
+		obj.setWeight(Utils.tryParseToDouble(txtWeight.getText()));
+		
 		obj.setName(txtName.getText());
+		obj.setEmail(txtEmail.getText());
+		obj.setPlans(comboBoxPlan.getValue());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;
@@ -191,12 +216,18 @@ public class MemberFormController implements Initializable {
 		comboBoxPlan.setItems(obsList);
 	}
 
-	private void setErrorMessages(Map<String, String> errors) {
+	private void setErrorMessages(Map<String, String> errors) 
+	{
 		Set<String> fields = errors.keySet();
 
-		if (fields.contains("name")) {
-			labelErrorName.setText(errors.get("name"));
-		}
+		labelErrorName.setText(fields.contains("name")? errors.get("name") : "" );
+		
+		labelErrorEmail.setText(fields.contains("email")? errors.get("email") : "" );
+		
+		labelErrorWeight.setText(fields.contains("weight")? errors.get("weight") : "" );
+		
+		labelErrorBirthDate.setText(fields.contains("birthDate")? errors.get("birthDate") : "" );
+		
 	}
 
 	private void initializeComboBoxDepartment() {
