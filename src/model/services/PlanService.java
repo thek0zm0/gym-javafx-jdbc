@@ -26,4 +26,9 @@ public class PlanService
 			dao.update(obj);
 		}
 	}
+	
+	public void remove(Plans obj)
+	{
+		dao.deleteById(obj.getId());
+	}
 }

@@ -3,9 +3,11 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
+import db.DbIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
@@ -19,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -43,6 +46,9 @@ public class PlansListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Plans, Plans> tableColumnEDIT;
+
+	@FXML
+	private TableColumn<Plans, Plans> tableColumnREMOVE;
 
 	@FXML
 	private Button btNew;
@@ -81,6 +87,7 @@ public class PlansListController implements Initializable, DataChangeListener {
 		obsList = FXCollections.observableArrayList(list);
 		tableViewPlan.setItems(obsList);
 		initEditButtons();
+		initRemoveButtons();
 	}
 
 	private void createDialogForm(Plans obj, String absoluteName, Stage parentStage) {
@@ -128,4 +135,45 @@ public class PlansListController implements Initializable, DataChangeListener {
 			}
 		});
 	}
+
+	private void initRemoveButtons() {
+		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnREMOVE.setCellFactory(param -> new TableCell<Plans, Plans>() {
+			private final Button button = new Button("remover");
+
+			@Override
+			protected void updateItem(Plans obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> removeEntity(obj));
+			}
+		});
+	}
+
+	private void removeEntity(Plans obj) 
+	{
+		Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Certeza?");
+		
+		if(result.get()== ButtonType.OK)
+		{
+			if(service==null)
+			{
+				throw new IllegalStateException("Service nulo...");
+			}
+			try
+			{
+				service.remove(obj);
+				updateTableView();
+			}
+			catch(DbIntegrityException e)
+			{
+				Alerts.showAlert("Erro ao remover objeto", null, e.getMessage(), AlertType.ERROR);
+			}
+		}
+	}
+
 }
