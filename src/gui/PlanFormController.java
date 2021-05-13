@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DbException;
 import gui.listeners.DataChangeListener;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Plans;
+import model.exceptions.ValidationException;
 import model.services.PlanService;
 
 public class PlanFormController implements Initializable
@@ -76,6 +79,10 @@ public class PlanFormController implements Initializable
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		}
+		catch(ValidationException e)
+		{
+			setErrorMessages(e.getErrors());
+		}
 		catch(DbException e)
 		{
 			Alerts.showAlert("Erro ao salvar no banco", null, e.getMessage(), AlertType.ERROR);
@@ -93,8 +100,21 @@ public class PlanFormController implements Initializable
 	private Plans getFormData() 
 	{
 		Plans obj = new Plans();
+		
+		ValidationException exception = new ValidationException("Erro de validation...");
+		
 		obj.setId((Utils.tryParseToInt(txtId.getText())));
+		
+		if(txtName.getText()==null||txtName.getText().trim().equals(""))
+		{
+			exception.addError("name", "Campo nome vazio.");
+		}
 		obj.setName(txtName.getText());
+		
+		if(exception.getErrors().size()>0)
+		{
+			throw exception;
+		}
 		return obj;
 	}
 
@@ -124,6 +144,16 @@ public class PlanFormController implements Initializable
 		}
 		txtId.setText(String.valueOf(entity.getId()));
 		txtName.setText(entity.getName());
+	}
+	
+	private void setErrorMessages(Map<String, String> errors)
+	{
+		Set<String> fields = errors.keySet();
+		
+		if(fields.contains("name"))
+		{
+			labelErrorName.setText(errors.get("name"));
+		}
 	}
 
 }
