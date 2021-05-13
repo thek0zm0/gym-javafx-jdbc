@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -38,6 +39,15 @@ public class MemberListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Member, String> tableColumnName;
+	
+	@FXML
+	private TableColumn<Member, String> tableColumnEmail;
+	
+	@FXML
+	private TableColumn<Member, Date> tableColumnBirthDate;
+	
+	@FXML
+	private TableColumn<Member, Double> tableColumnWeight;
 
 	@FXML
 	private TableColumn<Member, Member> tableColumnEDIT;
@@ -69,7 +79,11 @@ public class MemberListController implements Initializable, DataChangeListener {
 	private void initializeNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
+		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+		Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy");
+		tableColumnWeight.setCellValueFactory(new PropertyValueFactory<>("weight"));
+		Utils.formatTableColumnDouble(tableColumnWeight, 2);
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewMember.prefHeightProperty().bind(stage.heightProperty());
 	}

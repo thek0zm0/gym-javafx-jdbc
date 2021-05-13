@@ -8,9 +8,9 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="306.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MemberListController">
+<VBox prefHeight="328.0" prefWidth="558.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MemberListController">
    <children>
-      <Label prefHeight="24.0" prefWidth="121.0" text="Registrar Treinos">
+      <Label prefHeight="24.0" prefWidth="121.0" text="Registrar Membros">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
@@ -24,7 +24,10 @@
         <columns>
           <TableColumn fx:id="tableColumnId" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="tableColumnName" prefWidth="124.0" text="Nome" />
-            <TableColumn fx:id="tableColumnEDIT" prefWidth="130.0" />
+            <TableColumn fx:id="tableColumnEmail" prefWidth="133.0" text="Email" />
+            <TableColumn fx:id="tableColumnBirthDate" prefWidth="93.0" text="Nascimento" />
+            <TableColumn fx:id="tableColumnWeight" prefWidth="75.0" text="Peso (kg)" />
+            <TableColumn fx:id="tableColumnEDIT" prefWidth="54.0" />
             <TableColumn fx:id="tableColumnREMOVE" prefWidth="124.0" />
         </columns>
       </TableView>
