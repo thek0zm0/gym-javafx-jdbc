@@ -14,7 +14,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import mode.entities.Plans;
+import model.entities.Plans;
 import model.services.PlanService;
 
 public class PlansListController implements Initializable
