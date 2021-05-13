@@ -92,6 +92,7 @@ public class PlansListController implements Initializable
 			
 			PlanFormController controller = loader.getController();
 			controller.setPlan(obj);
+			controller.setPlanService(new PlanService());
 			controller.updateFormData();
 			
 			Stage dialogStage = new Stage();

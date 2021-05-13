@@ -14,4 +14,16 @@ public class PlanService
 	{
 		return dao.findAll();
 	}
+	
+	public void saveOrUpdate(Plans obj)
+	{
+		if(obj.getId()==null)
+		{
+			dao.insert(obj);
+		}
+		else
+		{
+			dao.update(obj);
+		}
+	}
 }
